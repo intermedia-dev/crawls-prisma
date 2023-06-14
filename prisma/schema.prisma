@@ -23,8 +23,8 @@ model pages {
   url               String?
   state             String?
   county            String?
-  // created_at        String
-  // updated_at        String
+  created_at        DateTime
+  updated_at        DateTime
 }
 
 
