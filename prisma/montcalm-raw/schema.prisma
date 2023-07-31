@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("MONTCALM_DATABASE_URL")
+}
+
+model Category {
+  id     Int      @id @default(autoincrement())
+  name   String   @db.VarChar(255)
+  County County[]
+}
+
+model State {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(255)
+
+  department   String @db.VarChar(255)
+  website      String @db.VarChar(255)
+  location_po  String @db.VarChar(255)
+  phone_number String @db.VarChar(255)
+  fax          String @db.VarChar(255)
+
+  incarcerated_inmates String @db.VarChar(255)
+  visitor_application  String @db.VarChar(255)
+  video_visitation     String @db.VarChar(255)
+
+  send_package String @db.VarChar(255)
+  send_email   String @db.VarChar(255)
+  send_money   String @db.VarChar(255)
+  phone_calls  String @db.VarChar(255)
+
+  County County[]
+}
+
+model ContactInfo {
+  id Int @id @default(autoincrement())
+
+  county_id Int    @unique
+  county    County @relation(fields: [county_id], references: [id])
+
+  name         String @db.VarChar(255)
+  phone_number String @db.VarChar(255)
+  address      String @db.VarChar(255)
+  website      String @db.VarChar(255)
+  email        String @db.VarChar(255)
+}
+
+model County {
+  id Int @id @default(autoincrement())
+
+  name                 String   @db.VarChar(255)
+  police_records       String[]
+  arrest_records       String[]
+  sex_offender_records String[]
+  visiting_hours       String[]
+  long                 Float
+  lat                  Float
+
+  ContactInfo ContactInfo?
+
+  category_id Int
+  category    Category @relation(fields: [category_id], references: [id])
+
+  state_id Int
+  state    State @relation(fields: [state_id], references: [id])
+
+  near_by    NearBy @relation(fields: [near_by_id], references: [id])
+  near_by_id Int
+}
+
+model NearBy {
+  id Int @id @default(autoincrement())
+
+  near_county County[]
+}

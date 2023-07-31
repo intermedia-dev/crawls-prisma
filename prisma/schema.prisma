@@ -2,8 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
-	previewFeatures = ["fullTextSearch", "fullTextIndex"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -11,23 +11,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model pages {
-	id                Int     @id @default(autoincrement())
-	
-	meta_title        String?
-	meta_description  String?
-	meta_keywords     String?
-	category          String?
-	main_text         String?
-	url               String?
-	state             String?
-	county            String?
-	city	 	  String?
-	created_at        DateTime
-	updated_at        DateTime
+  id Int @id @default(autoincrement())
+
+  meta_title       String?
+  meta_description String?
+  meta_keywords    String?
+  category         String?
+  main_text        String?
+  url              String?
+  state            String?
+  county           String?
+  city             String?
+  created_at       DateTime
+  updated_at       DateTime
 }
-
-
-
-
