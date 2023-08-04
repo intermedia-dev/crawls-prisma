@@ -1,0 +1,145 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("MJ_LINCESES_CA_DATABASE_URL")
+}
+
+// {
+//       "id": 4326,
+//       "licenseNumber": "C10-0000009-LIC",
+//       "licenseStatus": "Active",
+//       "licenseStatusDate": "2021-02-02T00:00:00",
+//       "licenseTerm": "Annual",
+//       "licenseType": "Commercial -  Retailer",
+//       "licenseDesignation": "Adult-Use and Medicinal",
+//       "issueDate": "2019-01-31T00:00:00",
+//       "expirationDate": "2024-01-31T00:00:00",
+//       "licensingAuthorityId": "BCC",
+//       "licensingAuthority": "Bureau of Cannabis Control (BCC)",
+//       "businessLegalName": "Horizon Collective Inc.",
+//       "businessDbaName": "1841 El Camino",
+//       "businessOwnerName": "John Swanston, Sean Eaddy",
+//       "businessStructure": "Corporation",
+//       "activity": "Data Not Available",
+//       "premiseStreetAddress": "1841 El Camino Ave",
+//       "premiseCity": "Sacramento",
+//       "premiseState": "CA",
+//       "premiseCounty": "Sacramento",
+//       "premiseZipCode": "95815",
+//       "businessEmail": "Horizoncollective@yahoo.Com",
+//       "businessPhone": "(916) 870-8067",
+//       "parcelNumber": "Data Not Available",
+//       "premiseLatitude": 38.611463,
+//       "premiseLongitude": -121.423635,
+//       "dataRefreshedDate": "2023-08-03T05:01:07.79"
+//     },
+
+// "id": "BCC",
+// "name": "Bureau of Cannabis Control (BCC)",
+// "description": "Commercial",
+// "website": "https://bcc.ca.gov",
+// "email": "bcc@dca.ca.gov",
+// "phone": "833-768-5880",
+// "dataRefreshedDate": "2023-08-03T05:01:07.79"
+
+model Retailer {
+  id Int @id @default(autoincrement())
+
+  licenseTypeRef        LicenseType        @relation(fields: [licenseType], references: [name])
+  licenseTermRef        LicenseTerm        @relation(fields: [licenseTerm], references: [name])
+  licenseDesignationRef LicenseDesignation @relation(fields: [licenseDesignation], references: [name])
+
+  licenseNumber      String
+  licenseStatus      String
+  licenseStatusDate  DateTime
+  licenseTerm        String
+  licenseType        String
+  licenseDesignation String
+  issueDate          DateTime
+  expirationDate     DateTime
+
+  licensingAuthorityId String
+  licensingAuthority   String
+
+  businessLegalName String
+  businessDbaName   String
+  businessOwnerName String
+  businessStructure String
+  activity          String
+
+  premiseStreetAddress String
+  premiseCity          String
+  premiseState         String
+  premiseCounty        String
+  premiseZipCode       BigInt
+
+  businessEmail String
+  businessPhone String
+
+  parcelNumber      String
+  premiseLatitude   Float
+  premiseLongitude  Float
+  dataRefreshedDate DateTime
+}
+
+model County {
+  id Int @id @default(autoincrement())
+
+  name        String
+  state       String
+  countyState String
+}
+
+model LicenseType {
+  id Int @id @default(autoincrement())
+
+  name        String @unique
+  description String
+
+  Licence Retailer[]
+}
+
+model LicenseTerm {
+  id Int @id @default(autoincrement())
+
+  name        String @unique
+  description String
+
+  Licence Retailer[]
+}
+
+model LicenseDesignation {
+  id Int @id @default(autoincrement())
+
+  name        String @unique
+  description String
+
+  Licence Retailer[]
+}
+
+model LicenseAuthority {
+  id String @unique
+
+  name              String
+  description       String
+  website           String
+  email             String
+  phone             String
+  dataRefreshedDate DateTime
+
+  licenseBusinessTypes LicenseBusinessType[]
+}
+
+model LicenseBusinessType {
+  id Int @id @default(autoincrement())
+
+  licenseAuthorityRef LicenseAuthority @relation(fields: [licensingAuthorityId], references: [id])
+
+  name String @unique
+
+  licensingAuthorityId String @unique
+}
